@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ElectronService } from './core/services';
+import { ElectronService } from './shared/services';
 import { APP_CONFIG } from '../environments/environment';
 
 @Component({

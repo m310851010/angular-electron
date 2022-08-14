@@ -1,18 +1,10 @@
 import { NgModule } from '@angular/core';
-import { WindowComponent } from './window/window.component';
-
-
+import { ProgressCircleModule } from './progress-circle/progress-circle.module';
+import { WindowModule } from './window/window.module';
 
 @NgModule({
-  declarations: [
-
-  
-    WindowComponent
-  ],
-  imports: [
-  ],
-  exports: [
-
-  ]
+  declarations: [],
+  imports: [],
+  exports: [WindowModule, ProgressCircleModule]
 })
-export class UiLibModule { }
+export class UiLibModule {}

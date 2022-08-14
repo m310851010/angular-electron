@@ -1,0 +1,122 @@
+//@import './node_modules/ng-zorro-antd/style/themes/compact.less';
+@import './node_modules/ng-zorro-antd/ng-zorro-antd.less';
+body {
+  background-color: #fff;
+}
+
+@border-color-active: #85531b;
+
+@import './ui-lib/ui-lib.less';
+@primary-color: #cc7f29;
+@primary-1: #cc7f2999;
+@primary-color-outline: @border-color-active;
+@border-color-base: #949494;
+@border-width-base: 2px;
+@border-radius-base: 0;
+
+@outline-blur-size: 0;
+@outline-width: 0;
+@outlineColor: transparent;
+
+@shadow-color: transparent;
+
+label,
+button,
+div,
+span,
+a,
+input[type='radio'],
+input[type='checkbox'],
+input[type='button'],
+.@{ant-prefix}-checkbox-wrapper,
+.@{radio-prefix-cls}
+{
+  cursor: default;
+}
+
+// 输入框
+@input-hover-border-color: #646464;
+@input-outline-offset: 0;
+.@{input-prefix-cls} {
+  &:focus,
+  &-focused {
+    box-shadow: none;
+    border-color: @primary-color;
+  }
+}
+
+.@{input-prefix-cls}-affix-wrapper{
+  &:focus,
+  &-focused {
+    box-shadow: none;
+    border-color: @primary-color !important;
+  }
+}
+
+// 菜单
+@menu-highlight-color: #000;
+@menu-item-active-border-width: 0;
+.@{menu-prefix-cls}{
+  &-item,
+  &-submenu-title {
+    cursor: default;
+  }
+  &-item {
+    &:hover {
+      background-color: #0000001a;
+    }
+    &.@{menu-prefix-cls}-item-selected:hover {
+      background-color: #cc7f29cc;
+    }
+  }
+}
+
+// 按钮
+@btn-default-color: #000;
+@btn-default-bg: #ccc;
+@btn-padding-horizontal-base: 15px;
+
+.@{btn-prefix-cls} {
+  font-size: 15px;
+  border-color: transparent;
+  cursor: default;
+  &:hover,
+  &:focus {
+    color: #000;
+    background-color: #ccc;
+    border-color: #7a7a7a;
+  }
+  &:active {
+    background-color: #999;
+    border-color: #999;
+  }
+
+  &-primary {
+    &:hover,
+    &:focus {
+      color: #fff;
+      background-color: @btn-primary-bg;
+      border-color: @border-color-active;
+    }
+    &:active {
+      background-color: @border-color-active;
+      border-color: @border-color-active;
+    }
+  }
+}
+
+// 单选
+@radio-focus-shadow: none;
+.@{radio-inner-prefix-cls} {
+  background-color: transparent;
+}
+
+
+/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}

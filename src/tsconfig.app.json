@@ -5,7 +5,10 @@
     "baseUrl": "",
     "types": [
       "node"
-    ]
+    ],
+    "paths": {
+      "ui-lib": [ "../ui-lib/public-api" ]
+    }
   },
   "files": [
     "main.ts",

@@ -53,7 +53,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.less"
             ],
             "scripts": [],
             "customWebpackConfig": {
@@ -164,7 +164,7 @@
             "inlineStyleLanguage": "less",
             "scripts": [],
             "styles": [
-              "src/styles.scss"
+              "src/styles.less"
             ],
             "assets": [
               "src/favicon.ico",

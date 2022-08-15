@@ -4,5 +4,6 @@
   "version": "11.1.0",
   "main": "main.js",
   "private": true,
+  "title": "测试客户端",
   "dependencies": {}
 }

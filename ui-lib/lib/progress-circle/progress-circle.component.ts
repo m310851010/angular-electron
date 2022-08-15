@@ -4,12 +4,10 @@ import {
   ElementRef,
   Input,
   OnDestroy,
-  OnInit,
   QueryList,
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { startAnimation, stopAnimation } from './progress-circle-animation';
 
 @Component({
@@ -24,20 +22,26 @@ import { startAnimation, stopAnimation } from './progress-circle-animation';
       [style.width.px]="size"
       [style.height.px]="size"
     >
-      <circle #ref [ngStyle]="componentStyle" fill-opacity="0" cx="75" cy="75" r="7.3" />
-      <circle #ref [ngStyle]="componentStyle" fill-opacity="0" cx="75" cy="75" r="7.3" />
-      <circle #ref [ngStyle]="componentStyle" fill-opacity="0" cx="75" cy="75" r="7.3" />
-      <circle #ref [ngStyle]="componentStyle" fill-opacity="0" cx="75" cy="75" r="7.3" />
-      <circle #ref [ngStyle]="componentStyle" fill-opacity="0" cx="75" cy="75" r="7.3" />
-      <circle #ref [ngStyle]="componentStyle" fill-opacity="0" cx="75" cy="75" r="7.3" />
+      <circle #ref [attr.fill]="color" fill-opacity="0" cx="75" cy="75" r="7.3" />
+      <circle #ref [attr.fill]="color" fill-opacity="0" cx="75" cy="75" r="7.3" />
+      <circle #ref [attr.fill]="color" fill-opacity="0" cx="75" cy="75" r="7.3" />
+      <circle #ref [attr.fill]="color" fill-opacity="0" cx="75" cy="75" r="7.3" />
+      <circle #ref [attr.fill]="color" fill-opacity="0" cx="75" cy="75" r="7.3" />
+      <circle #ref [attr.fill]="color" fill-opacity="0" cx="75" cy="75" r="7.3" />
     </svg>
   `
 })
 export class ProgressCircleComponent implements AfterViewInit, OnDestroy {
+  /**
+   * 大小
+   */
+  @Input() size = 32;
+  /**
+   * 颜色
+   */
+  @Input() color = '#cc7f29';
   @ViewChild('element', { static: true }) element!: ElementRef<SVGElement>;
-  @Input() componentStyle: { [klass: string]: NzSafeAny } | null;
   @ViewChildren('ref') refs: QueryList<ElementRef<SVGElement>>;
-  @Input() size = 50;
   animation: number;
   constructor() {}
 

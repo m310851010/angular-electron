@@ -20,6 +20,7 @@ function createWindow(): BrowserWindow {
     frame: false,
     webPreferences: {
       nodeIntegration: true,
+      devTools: true,
       allowRunningInsecureContent: serve,
       contextIsolation: false // false if you want to run e2e test with Spectron
     }

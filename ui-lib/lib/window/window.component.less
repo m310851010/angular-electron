@@ -6,7 +6,18 @@
   flex-direction: column;
   padding: 0;
   box-sizing: border-box;
-  height: 100%;
+
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  position: fixed;
+  overflow: visible !important;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  color: #000;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
   &.window-dark {
     background-color: #171717;

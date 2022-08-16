@@ -2,6 +2,7 @@
 @import './node_modules/ng-zorro-antd/ng-zorro-antd.less';
 body {
   background-color: #fff;
+  max-width: 100%;
 }
 
 @border-color-active: #85531b;
@@ -89,6 +90,8 @@ input[type='button'],
   &:active {
     background-color: #999;
     border-color: #999;
+    transform: scale(0.97);
+    transition: transform .1s ease-in;
   }
 
   &-primary {

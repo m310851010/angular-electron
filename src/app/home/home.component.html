@@ -1,12 +1,21 @@
-<desk-window style="padding: 100px">
-  <div style="width: 300px">
-    <input nz-input />
-    <br />
-    <br />
-    <button nz-button>测试1</button>
-    <br />
-    <br />
-    <button nz-button nzType="primary">测试2</button>
+<desk-window>
+  <desk-titlebar></desk-titlebar>
+  <div style="flex: 1">
+    <div style="padding: 20px">
+      <button nz-button>测试1</button>
+      <desk-progress-circle *ngIf="radioValue === 'A'"></desk-progress-circle>
+      <button nz-button>测试1</button>
+
+      <textarea nz-input>ddddd</textarea>
+      <div style="width: 300px">
+        <input nz-input />
+        <br />
+        <br />
+        <button nz-button>测试1</button>
+        <br />
+        <br />
+        <button nz-button nzType="primary" (click)="radioValue = radioValue === 'A' ? 'B' : 'A'">测试2</button>
+      </div>
+    </div>
   </div>
-  <desk-progress-circle></desk-progress-circle>
 </desk-window>

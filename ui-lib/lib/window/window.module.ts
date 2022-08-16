@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {WindowComponent} from './window.component';
+import { WindowComponent } from './window.component';
 
 @NgModule({
   declarations: [WindowComponent],
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   exports: [WindowComponent]
 })
-export class WindowModule { }
+export class WindowModule {}

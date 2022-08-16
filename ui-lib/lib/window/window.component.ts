@@ -28,6 +28,10 @@ export class WindowComponent implements OnInit, OnDestroy {
    */
   @Input() listenFocused?: boolean;
   /**
+   * 添加padding
+   */
+  @Input() padding = '20px 30px';
+  /**
    * 获取焦点
    */
   @Output() focusedChange = new EventEmitter<boolean>();

@@ -5,7 +5,7 @@ import { APP_CONFIG } from '../environments/environment';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.less']
 })
 export class AppComponent {
   constructor(

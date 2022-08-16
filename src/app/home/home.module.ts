@@ -35,7 +35,7 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
     ReactiveFormsModule,
     NzGridModule,
     NzFormModule,
-    NzIconModule.forChild([LockOutline, UserOutline, AppstoreOutline, SettingOutline, MailOutline]),
+    NzIconModule.forRoot([LockOutline, UserOutline, AppstoreOutline, SettingOutline, MailOutline]),
     NzRadioModule
   ]
 })

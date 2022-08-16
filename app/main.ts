@@ -20,10 +20,12 @@ function createWindow(): BrowserWindow {
     frame: false,
     webPreferences: {
       nodeIntegration: true,
-      devTools: true,
-      allowRunningInsecureContent: serve,
+      sandbox: false,
+      devTools: false, //是否开启 DevTools. 如果设置为 false, 则无法使用 BrowserWindow.webContents.openDevTools () 打开 DevTools
+      webSecurity: false, //当设置为 false, 它将禁用同源策略
       contextIsolation: false // false if you want to run e2e test with Spectron
-    }
+    },
+    center: true,
   });
 
   if (serve) {

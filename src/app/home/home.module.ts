@@ -21,6 +21,7 @@ import {
   UserOutline
 } from '@ant-design/icons-angular/icons';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   declarations: [HomeComponent],
@@ -36,7 +37,8 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
     NzGridModule,
     NzFormModule,
     NzIconModule.forRoot([LockOutline, UserOutline, AppstoreOutline, SettingOutline, MailOutline]),
-    NzRadioModule
+    NzRadioModule,
+    NzModalModule
   ]
 })
 export class HomeModule {}

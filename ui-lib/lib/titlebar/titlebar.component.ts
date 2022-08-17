@@ -78,7 +78,7 @@ export class TitlebarComponent implements OnInit {
   onMaxIconClick(isMaximized: boolean) {
     this.isMaximized = !isMaximized;
     this.isMaximizedChange.emit(this.isMaximized);
-    if (isMaximized) {
+    if (this.isMaximized) {
       this.maximizeClick.emit();
     } else {
       this.restoreDownClick.emit();

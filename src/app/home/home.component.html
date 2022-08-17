@@ -1,5 +1,5 @@
 <desk-window>
-  <desk-titlebar></desk-titlebar>
+  <desk-titlebar titlebar-action></desk-titlebar>
   <div style="flex: 1">
     <div style="padding: 20px">
       <button nz-button>测试1</button>
@@ -11,7 +11,7 @@
         <input nz-input />
         <br />
         <br />
-        <button nz-button>测试1</button>
+        <button nz-button (click)="openModal()">打开文件</button>
         <br />
         <br />
         <button nz-button nzType="primary" (click)="radioValue = radioValue === 'A' ? 'B' : 'A'">测试2</button>

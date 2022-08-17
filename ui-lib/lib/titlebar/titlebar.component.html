@@ -10,16 +10,21 @@
 </div>
 
 <div class="controls">
-  <a *ngIf="showMinimize" title="最小化" class="button minimize">
+  <a *ngIf="showMinimize" (click)="minimizeClick.emit()" title="最小化" class="button minimize">
     <svg class="icon" style="transform: scaleY(0.5)"><use xlink:href="#desk-icon-minimize"></use></svg>
   </a>
 
-  <a *ngIf="showMaximize" (click)="onMaxIconClick(isMaximized)" title="最大化" class="button maximize">
+  <a
+    *ngIf="showMaximize"
+    (click)="onMaxIconClick(isMaximized)"
+    [attr.title]="isMaximized ? '还原' : '最大化'"
+    class="button maximize"
+  >
     <svg *ngIf="isMaximized" class="icon"><use xlink:href="#desk-icon-maximize"></use></svg>
     <svg *ngIf="!isMaximized" class="icon"><use xlink:href="#desk-icon-restore"></use></svg>
   </a>
 
-  <a *ngIf="showClose" title="关闭" class="button close">
+  <a *ngIf="showClose" (click)="closeClick.emit()" title="关闭" class="button close">
     <svg class="icon"><use xlink:href="#desk-icon-close"></use></svg>
   </a>
 </div>

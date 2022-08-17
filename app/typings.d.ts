@@ -8,7 +8,7 @@ interface Window {
   process: any;
   openWindow: any;
   showOpenDialog: any;
-  invokeBowserWindow: any;
+  winId: number;
   require: any;
   electronAPI: any;
 }

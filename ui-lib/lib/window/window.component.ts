@@ -10,7 +10,7 @@ import {
   Output,
   Renderer2
 } from '@angular/core';
-import { fromEvent, Subject, takeUntil, tap } from 'rxjs';
+import { fromEvent, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'desk-window',

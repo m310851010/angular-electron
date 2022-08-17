@@ -1,39 +1,26 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, ipcMain } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
-
-let win: BrowserWindow = null;
+import { openWindow, setup } from './dialog';
+let mainWindow: BrowserWindow;
 const args = process.argv.slice(1),
   serve = args.some(val => val === '--serve');
 
 function createWindow(): BrowserWindow {
   const size = screen.getPrimaryDisplay().workAreaSize;
 
-  // Create the browser window.
-  win = new BrowserWindow({
-    // x: 0,
-    // y: 0,
-    // width: size.width,
-    // height: size.height,
-    width: 800,
-    height: 500,
-    frame: false,
-    webPreferences: {
-      nodeIntegration: true,
-      sandbox: false,
-      devTools: false, //是否开启 DevTools. 如果设置为 false, 则无法使用 BrowserWindow.webContents.openDevTools () 打开 DevTools
-      webSecurity: false, //当设置为 false, 它将禁用同源策略
-      contextIsolation: false // false if you want to run e2e test with Spectron
-    },
-    center: true,
+  mainWindow = openWindow({
+    width: size.width,
+    height: size.height,
+    skipTaskbar: false,
+    url: 'http://localhost:4200'
   });
+  mainWindow.maximize();
 
   if (serve) {
     const debug = require('electron-debug');
     debug();
-
-    require('electron-reloader')(module);
-    win.loadURL('http://localhost:4200');
+    // mainWindow.loadURL('http://localhost:4200');
   } else {
     // Path when running electron executable
     let pathIndex = './index.html';
@@ -44,18 +31,21 @@ function createWindow(): BrowserWindow {
     }
 
     const url = new URL(path.join('file:', __dirname, pathIndex));
-    win.loadURL(url.href);
+    mainWindow.loadURL(url.href);
   }
 
   // Emitted when the window is closed.
-  win.on('closed', () => {
+  mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store window
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    win = null;
+    mainWindow = null;
+    if (process.platform !== 'darwin') {
+      app.quit();
+    }
   });
 
-  return win;
+  return mainWindow;
 }
 
 try {
@@ -63,22 +53,22 @@ try {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
-  app.on('ready', () => setTimeout(createWindow, 400));
+  app.whenReady().then(() => {
+    createWindow();
+    app.on('activate', function () {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
+
+    setup();
+  });
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
+      mainWindow = null;
       app.quit();
-    }
-  });
-
-  app.on('activate', () => {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (win === null) {
-      createWindow();
     }
   });
 } catch (e) {

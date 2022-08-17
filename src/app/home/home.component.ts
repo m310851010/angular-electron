@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ElectronService } from '../shared/services';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,11 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
   validateForm!: FormGroup;
   radioValue = 'A';
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    public electronService: ElectronService,
+    private nzModalService: NzModalService
+  ) {}
 
   submitForm(): void {
     if (this.validateForm.valid) {
@@ -23,6 +28,14 @@ export class HomeComponent implements OnInit {
         }
       });
     }
+  }
+
+  openModal() {
+    this.nzModalService.create({ nzTitle: '冲冲冲', nzContent: 'xxx' });
+    this.electronService.openWindow({ url: 'http://localhost:4200', modal: true });
+    // this.electronService.showOpenDialog({ properties: ['openFile', 'multiSelections'] }).then(list => {
+    //   console.log(list.filePaths);
+    // });
   }
 
   ngOnInit(): void {

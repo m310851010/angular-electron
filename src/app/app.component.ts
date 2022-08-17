@@ -8,9 +8,7 @@ import { APP_CONFIG } from '../environments/environment';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
-  constructor(
-    private electronService: ElectronService
-  ) {
+  constructor(private electronService: ElectronService) {
     console.log('APP_CONFIG', APP_CONFIG);
 
     if (electronService.isElectron) {

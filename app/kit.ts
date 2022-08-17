@@ -1,4 +1,7 @@
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+const hasOwn = Object.prototype.hasOwnProperty;
+const defineProperty = Object.defineProperty;
+const gOPD = Object.getOwnPropertyDescriptor;
 
 /**
  * 深度clone
@@ -6,7 +9,34 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
  */
 export function clone<T = NzSafeAny>(target: T): T {
   const _target = Array.isArray(target) ? [] : {};
-  return this.extend(_target as T, target);
+  return extend(_target as T, target);
+}
+
+function getProperty<T = NzSafeAny>(obj: T, name: string) {
+  if (name === '__proto__') {
+    if (!hasOwn.call(obj, name)) {
+      return void 0;
+    } else if (gOPD) {
+      // @ts-ignore
+      return gOPD(obj, name).value;
+    }
+  }
+  // @ts-ignore
+  return obj[name];
+}
+
+function setProperty<T = NzSafeAny>(target: T, options: { name: string; newValue: NzSafeAny }) {
+  if (defineProperty && options.name === '__proto__') {
+    defineProperty(target, options.name, {
+      enumerable: true,
+      configurable: true,
+      value: options.newValue,
+      writable: true
+    });
+  } else {
+    // @ts-ignore
+    target[options.name] = options.newValue;
+  }
 }
 
 /**
@@ -23,8 +53,8 @@ export function extend<T = NzSafeAny>(target: T, ...args: NzSafeAny[]): T {
     }
 
     for (const name in options) {
-      const src = this.getProperty(target, name);
-      const copy = this.getProperty(options, name);
+      const src = getProperty(target, name);
+      const copy = getProperty(options, name);
       if (target === copy || copy === undefined) {
         continue;
       }
@@ -38,9 +68,9 @@ export function extend<T = NzSafeAny>(target: T, ...args: NzSafeAny[]): T {
           clone = src && isPlainObject(src) ? src : {};
         }
 
-        this.setProperty(target, { name, newValue: this.extend(clone, copy) });
+        setProperty(target, { name, newValue: extend(clone, copy) });
       } else {
-        this.setProperty(target, { name, newValue: copy });
+        setProperty(target, { name, newValue: copy });
       }
     }
   }

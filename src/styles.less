@@ -1,5 +1,7 @@
 //@import './node_modules/ng-zorro-antd/style/themes/compact.less';
 @import './node_modules/ng-zorro-antd/ng-zorro-antd.less';
+@import './ui-lib/ui-lib.less';
+
 body {
   background-color: #fff;
   max-width: 100%;
@@ -7,7 +9,6 @@ body {
 
 @border-color-active: #85531b;
 
-@import './ui-lib/ui-lib.less';
 @primary-color: #cc7f29;
 @primary-1: #cc7f2999;
 @primary-color-outline: @border-color-active;
@@ -114,6 +115,24 @@ input[type='button'],
   background-color: transparent;
 }
 
+// 对话框
+@modal-header-padding: 5px 32px 5px 12px;
+@modal-heading-color: #fff;
+@modal-close-color: #fff;
+@modal-header-bg: @primary-color;
+@modal-header-border-width: 0;
+@modal-header-close-size: 32px;
+@modal-body-padding: 10px 20px;
+.@{dialog-prefix-cls}-close {
+  &:hover {
+    color: #fff;
+    transition: background-color 0.1s;
+    background-color: #e81123;
+  }
+  &:active {
+    background-color: #f1707a;
+  }
+}
 
 /* You can add global styles to this file, and also import other style files */
 html,
@@ -121,5 +140,6 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  user-select: none;
   font-family: Arial, Helvetica, sans-serif;
 }

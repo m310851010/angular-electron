@@ -31,11 +31,22 @@ export class HomeComponent implements OnInit {
   }
 
   openModal() {
-    this.nzModalService.create({ nzTitle: '冲冲冲', nzContent: 'xxx' });
-    this.electronService.openWindow({ url: 'http://localhost:4200', modal: true });
+    // this.nzModalService.create({ nzTitle: '冲冲冲', nzContent: 'xxx' });
+    // this.electronService.openWindow({ url: 'http://localhost:4200', modal: true });
     // this.electronService.showOpenDialog({ properties: ['openFile', 'multiSelections'] }).then(list => {
     //   console.log(list.filePaths);
     // });
+    this.electronService
+      .showMessageBox({
+        title: '提示',
+        message: 'xxx',
+        type: 'question',
+        noLink: true,
+        buttons: ['测试', '先谢谢']
+      })
+      .then(ret => {
+        console.log(ret);
+      });
   }
 
   ngOnInit(): void {

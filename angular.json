@@ -80,13 +80,14 @@
             },
             "production": {
               "optimization": true,
-              "outputHashing": "all",
+              "outputHashing": "bundles",
               "sourceMap": false,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "resourcesOutputPath": "assets",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -112,7 +113,8 @@
             },
             "web-production": {
               "optimization": true,
-              "outputHashing": "all",
+              "outputHashing": "bundles",
+              "resourcesOutputPath": "assets",
               "sourceMap": false,
               "namedChunks": false,
               "aot": true,

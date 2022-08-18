@@ -8,7 +8,12 @@ import {
   BrowserWindow,
   BrowserWindowConstructorOptions,
   OpenDialogOptions,
-  OpenDialogReturnValue
+  OpenDialogReturnValue,
+  Dialog,
+  SaveDialogOptions,
+  SaveDialogReturnValue,
+  MessageBoxOptions,
+  MessageBoxReturnValue
 } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
@@ -31,7 +36,6 @@ export class ElectronService {
     // Conditional imports
     if (this.isElectron) {
       this.ipcRenderer = window.require('electron').ipcRenderer;
-      console.log("window.require('electron')====");
       this.webFrame = window.require('electron').webFrame;
 
       this.fs = window.require('fs');
@@ -60,6 +64,20 @@ export class ElectronService {
       // If you want to use a NodeJS 3rd party deps in Renderer process,
       // ipcRenderer.invoke can serve many common use cases.
       // https://www.electronjs.org/docs/latest/api/ipc-renderer#ipcrendererinvokechannel-args
+    } else {
+      // mock ipcRenderer
+      const noop = () => new Promise((s, f) => {});
+      const noopVoid = () => ({} as IpcRenderer);
+      // @ts-ignore
+      this.ipcRenderer = {
+        invoke: noop,
+        on: noopVoid,
+        send: noop,
+        sendSync: noop,
+        sendTo: noop,
+        sendToHost: noop,
+        once: noopVoid
+      };
     }
   }
 
@@ -128,10 +146,47 @@ export class ElectronService {
   /**
    * 打开对话框
    *
-   * @param option
+   * @param option OpenDialogOptions
    */
   showOpenDialog(option: OpenDialogOptions): Promise<OpenDialogReturnValue> {
-    return this.asyncSend<OpenDialogReturnValue>('mdc.showOpenDialog', option);
+    return this.invokeDialog<OpenDialogReturnValue>('showOpenDialog', true, option);
+  }
+
+  /**
+   * 打开保存文件对话框
+   *
+   * @param option OpenDialogOptions
+   */
+  showSaveDialog(option: SaveDialogOptions): Promise<SaveDialogReturnValue> {
+    return this.invokeDialog<SaveDialogReturnValue>('showSaveDialog', true, option);
+  }
+
+  /**
+   * 显示消息对话框
+   *
+   * @param option OpenDialogOptions type为系统默认图标, 取值有 none/info/error/question/warning
+   */
+  showMessageBox(option: MessageBoxOptions): Promise<MessageBoxReturnValue> {
+    // 默认使用windows样式
+    return this.invokeDialog<MessageBoxReturnValue>('showMessageBox', true, { noLink: true, cancelId: 2, ...option });
+  }
+
+  /**
+   * 显示错误消息对话框
+   */
+  showErrorBox(title: string, content: string): void {
+    this.ipcRenderer.send('mdc.invokeDialog', null, 'showErrorBox', false, title, content);
+  }
+
+  /**
+   * 调用对话框方法
+   *
+   * @param fnName 函数名称
+   * @param hasParent 是否有parent参数
+   * @param option 函数参数
+   */
+  invokeDialog<T>(fnName: keyof Dialog, hasParent: boolean, ...option: NzSafeAny[]): Promise<T> {
+    return this.send<T>('mdc.invokeDialog', fnName, hasParent, ...option);
   }
 
   /**
@@ -140,7 +195,7 @@ export class ElectronService {
    * @param channel
    * @param args
    */
-  asyncSend<T>(channel: string, ...args: NzSafeAny[]): Promise<T> {
+  send<T>(channel: string, ...args: NzSafeAny[]): Promise<T> {
     const channelId = randomId();
     return new Promise((resolve, reject) => {
       this.ipcRenderer.on(channelId, (event, { success, data }) => {

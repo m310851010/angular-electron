@@ -9,7 +9,7 @@
   "bracketSpacing": true,
   "proseWrap": "preserve",
   "trailingComma": "none",
-  "endOfLine": "lf",
+  "endOfLine": "auto",
   "jsxBracketSameLine": true,
   "overrides": [
     {

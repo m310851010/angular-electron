@@ -6,8 +6,8 @@ import * as path from 'path';
  * 打开对话框
  * @param option
  */
-export function openWindow(option?: DialogOption): BrowserWindow {
-  const defaultOption: DialogOption = {
+export function openWindow(option?: OpenWindowOption): BrowserWindow {
+  const defaultOption: OpenWindowOption = {
     width: 800,
     height: 500,
     frame: false,
@@ -41,12 +41,19 @@ export function openWindow(option?: DialogOption): BrowserWindow {
     win.loadFile(opts.file);
   }
 
-  win.webContents.openDevTools();
+  if (opts.webPreferences.devTools) {
+    win.webContents.openDevTools();
+  }
 
   return win;
 }
 
-function ipcOpenWindow(event: IpcMainEvent, option: DialogOption) {
+/**
+ * ipc方式打开对话框
+ * @param event
+ * @param option
+ */
+function ipcOpenWindow(event: IpcMainEvent, option: OpenWindowOption) {
   try {
     const win = openWindow({ parent: BrowserWindow.fromWebContents(event.sender), ...option });
     event.returnValue = win.id;
@@ -55,12 +62,20 @@ function ipcOpenWindow(event: IpcMainEvent, option: DialogOption) {
   }
 }
 
+/**
+ * 把消息转成Promise返回给渲染进程
+ * @param event
+ * @param channel
+ * @param promise
+ */
 function returnPromise<T>(event: IpcMainEvent, channel: string, promise: Promise<T>) {
-  promise
-    .then(data => event.sender.send(channel, { success: true, data }))
-    .catch(err => {
-      event.sender.send(channel, { success: false, data: err });
-    });
+  if (promise && channel) {
+    promise
+      .then(data => event.sender.send(channel, { success: true, data }))
+      .catch(err => {
+        event.sender.send(channel, { success: false, data: err });
+      });
+  }
 }
 
 /**
@@ -94,11 +109,17 @@ function ipcInvokeBrowserWindow(
   event.returnValue = browserWindow[name];
 }
 
-// 启动注册消息
+/**
+ * 启动注册消息
+ */
 export function setup() {
+  // 获取当前窗口id
+  ipcMain.on('mdc.currentWinId', event => (event.returnValue = BrowserWindow.fromWebContents(event.sender).id));
   // 打开新窗口
   ipcMain.on('mdc.openWindow', ipcOpenWindow);
+  // 执行窗口方法
   ipcMain.on('mdc.invokeBrowserWindow', ipcInvokeBrowserWindow);
+  // 监听窗口消息
   ipcMain.on('mdc.onBrowserWindow', (event, channel, { on, winId }) => {
     const browserWindow = winId ? BrowserWindow.fromId(winId) : BrowserWindow.fromWebContents(event.sender);
     browserWindow.on(on, (evt, ...args) => {
@@ -106,17 +127,17 @@ export function setup() {
     });
   });
 
-  // 打开对话框
-  ipcMain.on('mdc.showOpenDialog', (event, channel, options) => {
-    const browserWindow = BrowserWindow.fromWebContents(event.sender);
-    returnPromise(event, channel, dialog.showOpenDialog(browserWindow, options));
+  // 执行对话框方法
+  ipcMain.on('mdc.invokeDialog', (event, channel, fnName, hasParent, ...options) => {
+    if (hasParent) {
+      returnPromise(event, channel, dialog[fnName](BrowserWindow.fromWebContents(event.sender), ...options));
+    } else {
+      returnPromise(event, channel, dialog[fnName](...options));
+    }
   });
-
-  // 获取当前窗口id
-  ipcMain.on('mdc.currentWinId', event => (event.returnValue = BrowserWindow.fromWebContents(event.sender).id));
 }
 
-export interface DialogOption extends BrowserWindowConstructorOptions {
+export interface OpenWindowOption extends BrowserWindowConstructorOptions {
   /**
    * url地址
    */

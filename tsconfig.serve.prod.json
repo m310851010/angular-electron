@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.serve.json",
+  "compilerOptions": {
+    "sourceMap": false
+  }
+}

@@ -1,0 +1,18 @@
+<nz-result nzTitle="页面加载失败" nzStatus="error">
+  <div nz-result-content>
+    <div class="desc">
+      <h4 nz-title>请尝试:</h4>
+      <p nz-paragraph>
+        <i nz-icon nzType="close-circle"></i>
+        加载的页面地址不正确
+      </p>
+      <p nz-paragraph>
+        <i nz-icon nzType="close-circle"></i>
+        当前网络连接错误
+      </p>
+    </div>
+  </div>
+  <div nz-result-extra>
+    <button nz-button nzType="primary" (click)="handleRefresh($event)">返回</button>
+  </div>
+</nz-result>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-// If you import a module but never use any of the imported values other than as TypeScript types,
+// If you import a module but never use NzSafeAny of the imported values other than as TypeScript types,
 // the resulting javascript file will look as if you never imported the module at all.
 import {
   IpcRenderer,
@@ -13,14 +13,15 @@ import {
   SaveDialogOptions,
   SaveDialogReturnValue,
   MessageBoxOptions,
-  MessageBoxReturnValue
+  MessageBoxReturnValue,
+  IpcRendererEvent
 } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
-function randomId() {
-  return Date.now() + '-' + Math.random() + '-' + Math.random();
+function randomId(prefix: string) {
+  return prefix + ':' + Date.now() + '-' + Math.random();
 }
 
 @Injectable({
@@ -133,14 +134,8 @@ export class ElectronService {
    * @param listener
    */
   onBrowserWindow(option: string | OnBrowserWindow, listener?: (event, ...args) => void): void {
-    const channel = randomId();
-    if (typeof option === 'string') {
-      this.ipcRenderer.on(channel, listener);
-      this.ipcRenderer.send('mdc.onBrowserWindow', channel, { on: option });
-    } else {
-      this.ipcRenderer.on(channel, option.listener);
-      this.ipcRenderer.send('mdc.onBrowserWindow', channel, { on: option.event, winId: option.winId });
-    }
+    const args = typeof option === 'string' ? { on: option } : { on: option.event, winId: option.winId };
+    this.send({ channel: 'mdc.onBrowserWindow', callback: listener, args });
   }
 
   /**
@@ -173,9 +168,11 @@ export class ElectronService {
 
   /**
    * 显示错误消息对话框
+   * @param content 内容
+   * @param title 标题 默认显示 "信息"
    */
-  showErrorBox(title: string, content: string): void {
-    this.ipcRenderer.send('mdc.invokeDialog', null, 'showErrorBox', false, title, content);
+  showErrorBox(content: string, title: string = '信息'): Promise<void> {
+    return this.invokeDialog<void>('showErrorBox', false, title, content);
   }
 
   /**
@@ -186,27 +183,21 @@ export class ElectronService {
    * @param option 函数参数
    */
   invokeDialog<T>(fnName: keyof Dialog, hasParent: boolean, ...option: NzSafeAny[]): Promise<T> {
-    return this.send<T>('mdc.invokeDialog', fnName, hasParent, ...option);
+    return this.ipcRenderer.invoke('mdc.invokeDialog', fnName, hasParent, ...option);
   }
 
   /**
-   * 异步发送
-   *
-   * @param channel
-   * @param args
+   * 发送消息, 可通过回调函数获取结果
+   * @param option 配置
    */
-  send<T>(channel: string, ...args: NzSafeAny[]): Promise<T> {
-    const channelId = randomId();
-    return new Promise((resolve, reject) => {
-      this.ipcRenderer.on(channelId, (event, { success, data }) => {
-        if (success) {
-          resolve(data);
-        } else {
-          reject(data);
-        }
-      });
-      this.ipcRenderer.send(channel, channelId, ...args);
-    });
+  send<T>(option: SendOptions): void {
+    const channelId = randomId(option.channel);
+    this.ipcRenderer.on(channelId, option.callback);
+    this.ipcRenderer.send(
+      option.channel,
+      channelId,
+      ...(Array.isArray(option.args) ? option.args : option.args === undefined ? [] : [option.args])
+    );
   }
 }
 
@@ -225,11 +216,11 @@ export interface EventBrowserWindow {
   /**
    * 如果设置属性值, 请传入value
    */
-  value?: any;
+  value?: NzSafeAny;
   /**
    * 如果是函数请传入args参数
    */
-  args?: any[];
+  args?: NzSafeAny[];
 }
 
 export interface DialogOption extends BrowserWindowConstructorOptions {
@@ -258,4 +249,24 @@ export interface OnBrowserWindow {
    * 窗口ID
    */
   winId?: number;
+}
+
+/**
+ * 发送消息的配置
+ */
+export interface SendOptions {
+  /**
+   * 频道ID
+   */
+  channel: string;
+  /**
+   * 回调函数
+   * @param event
+   * @param result
+   */
+  callback: (event: IpcRendererEvent, ...result: NzSafeAny[]) => void;
+  /**
+   * 发送的参数
+   */
+  args?: NzSafeAny | NzSafeAny[];
 }

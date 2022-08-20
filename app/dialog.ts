@@ -122,17 +122,15 @@ export function setup() {
   // 监听窗口消息
   ipcMain.on('mdc.onBrowserWindow', (event, channel, { on, winId }) => {
     const browserWindow = winId ? BrowserWindow.fromId(winId) : BrowserWindow.fromWebContents(event.sender);
-    browserWindow.on(on, (evt, ...args) => {
-      event.sender.send(channel, ...args);
-    });
+    browserWindow.on(on, (evt, ...args) => event.sender.send(channel, ...args));
   });
 
   // 执行对话框方法
-  ipcMain.on('mdc.invokeDialog', (event, channel, fnName, hasParent, ...options) => {
+  ipcMain.handle('mdc.invokeDialog', async (event, fnName: string, hasParent: boolean, ...options) => {
     if (hasParent) {
-      returnPromise(event, channel, dialog[fnName](BrowserWindow.fromWebContents(event.sender), ...options));
+      return dialog[fnName](BrowserWindow.fromWebContents(event.sender), ...options);
     } else {
-      returnPromise(event, channel, dialog[fnName](...options));
+      return dialog[fnName](...options);
     }
   });
 }

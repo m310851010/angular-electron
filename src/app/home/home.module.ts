@@ -22,23 +22,27 @@ import {
 } from '@ant-design/icons-angular/icons';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import {NzUploadModule} from "ng-zorro-antd/upload";
+import {NzSpaceModule} from "ng-zorro-antd/space";
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [
-    CommonModule,
-    SharedModule,
-    HomeRoutingModule,
-    NzInputModule,
-    NzButtonModule,
-    NzMenuModule,
-    NzCheckboxModule,
-    ReactiveFormsModule,
-    NzGridModule,
-    NzFormModule,
-    NzIconModule.forRoot([LockOutline, UserOutline, AppstoreOutline, SettingOutline, MailOutline]),
-    NzRadioModule,
-    NzModalModule
-  ]
+    imports: [
+        CommonModule,
+        SharedModule,
+        HomeRoutingModule,
+        NzInputModule,
+        NzButtonModule,
+        NzMenuModule,
+        NzCheckboxModule,
+        ReactiveFormsModule,
+        NzGridModule,
+        NzFormModule,
+        NzIconModule.forRoot([LockOutline, UserOutline, AppstoreOutline, SettingOutline, MailOutline]),
+        NzRadioModule,
+        NzModalModule,
+        NzUploadModule,
+        NzSpaceModule
+    ]
 })
 export class HomeModule {}

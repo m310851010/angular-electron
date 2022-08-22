@@ -121,6 +121,7 @@ input[type='button'],
 @modal-close-color: #fff;
 @modal-header-bg: @primary-color;
 @modal-header-border-width: 0;
+@modal-footer-border-width: 0;
 @modal-header-close-size: 32px;
 @modal-body-padding: 10px 20px;
 .@{dialog-prefix-cls}-close {
@@ -132,6 +133,10 @@ input[type='button'],
   &:active {
     background-color: #f1707a;
   }
+}
+
+.form-unless .@{ant-prefix}-form-item {
+  margin-bottom: 5px;
 }
 
 /* You can add global styles to this file, and also import other style files */

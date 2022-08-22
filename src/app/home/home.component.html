@@ -1,21 +1,29 @@
 <desk-window>
   <desk-titlebar titlebar-action></desk-titlebar>
-  <div style="flex: 1">
-    <div style="padding: 20px">
-      <button nz-button>测试1</button>
-      <desk-progress-circle *ngIf="radioValue === 'A'"></desk-progress-circle>
-      <button nz-button>测试1</button>
+  <div style="flex: 1; padding: 50px">
+    <div nz-form>
+      <nz-form-item nz-row>
+        <nz-form-label nz-col nzFlex="100px" nzRequired>数据文件</nz-form-label>
+        <nz-form-control nz-col nzFlex="auto">
+          <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
+            <input nz-input readonly [ngModel]="filePath" />
+          </nz-input-group>
 
-      <textarea nz-input>ddddd</textarea>
-      <div style="width: 300px">
-        <input nz-input />
-        <br />
-        <br />
-        <button nz-button (click)="openModal()">打开文件</button>
-        <br />
-        <br />
-        <button nz-button nzType="primary" (click)="radioValue = radioValue === 'A' ? 'B' : 'A'">测试2</button>
-      </div>
+          <ng-template #addOnAfterTemplate>
+            <a class="btn-file" (click)="onOpenFileDialog()">文件...</a>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <div nz-col nzFlex="100px"></div>
+        <nz-form-control nz-col nzFlex="auto">
+          <nz-space>
+            <desk-progress-circle *nzSpaceItem></desk-progress-circle>
+            <button *nzSpaceItem nz-button nzType="primary" (click)="onSubmit()">计算</button>
+          </nz-space>
+        </nz-form-control>
+      </nz-form-item>
     </div>
   </div>
 </desk-window>

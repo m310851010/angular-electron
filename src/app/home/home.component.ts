@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ElectronService } from '../shared/services';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalService, ModalOptions } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-home',
@@ -9,6 +9,10 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   styleUrls: ['./home.component.less']
 })
 export class HomeComponent implements OnInit {
+  /**
+   * 选择的文件路径
+   */
+  filePath?: string;
   validateForm!: FormGroup;
   radioValue = 'A';
   constructor(
@@ -28,6 +32,46 @@ export class HomeComponent implements OnInit {
         }
       });
     }
+  }
+
+  /**
+   * 点击选择文件按钮
+   */
+  onOpenFileDialog() {
+    this.electronService
+      .showOpenDialog({ properties: ['openFile'], filters: [{ name: '数据文件', extensions: ['xls', 'xlsx'] }] })
+      .then(v => {
+        if (v.filePaths.length) {
+          this.filePath = v.filePaths[0];
+        }
+      });
+  }
+
+  /**
+   * 提交
+   */
+  onSubmit() {
+    if (!this.filePath) {
+      this.alert({ nzContent: '请选择文件' });
+      return;
+    }
+
+    const exists = this.electronService.fs.existsSync(this.filePath);
+    if (!exists) {
+      this.alert({ nzContent: '文件不存在或已被删除，请重新选择' });
+      return;
+    }
+
+  }
+
+  private alert(option: ModalOptions) {
+    return this.nzModalService.create({
+      nzCentered: true,
+      nzMaskClosable: false,
+      nzTitle: '提示',
+      nzCancelText: null,
+      ...option
+    });
   }
 
   openModal() {

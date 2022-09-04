@@ -36,7 +36,8 @@
           }
         ],
         "@typescript-eslint/naming-convention": 0,
-        "@angular-eslint/no-host-metadata-property": 0
+        "@angular-eslint/no-host-metadata-property": 0,
+        "no-underscore-dangle": "off"
       }
     },
     {

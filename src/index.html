@@ -7,8 +7,41 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+  <script type="application/javascript">
+    function BasePath(url, ...keys) {
+      const strings = [];
+      for (let i = 0; i < url.length; i++) {
+        strings.push(url.raw[i], keys[i] == null ? '' : keys[i]);
+      }
+      return basePath + strings.join('');
+    }
+
+    const basePath = (() => {
+      const isServe =  location.protocol.indexOf('http') !== -1;
+      const isNode = typeof __dirname !== 'undefined';
+      if (isServe && isNode) {
+        return './src';
+      }
+      if (isNode) {
+        return __dirname;
+      }
+      return '.';
+    })();
+    const assetsPath = basePath + '/assets';
+  </script>
 </head>
 <body>
   <app-root>Loading...</app-root>
+  <script type="application/javascript">
+    var Module =  {
+      onRuntimeInitialized: function () {
+        console.log('=====')
+      },
+      locateFile: function(path, scriptDirectory) {
+        return assetsPath + '/wasm/spbm_calc_wasm.wasm';
+      }
+    }
+  </script>
+  <script type="application/javascript" src="./assets/wasm/spbm_calc_wasm.js"></script>
 </body>
 </html>

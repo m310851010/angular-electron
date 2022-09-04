@@ -107,6 +107,19 @@ input[type='button'],
       border-color: @border-color-active;
     }
   }
+
+  &-link {
+    &:hover,
+    &:focus {
+      color: @link-color;
+      background-color: transparent;
+      border-color: transparent;
+    }
+    &:active {
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
 }
 
 // 单选

@@ -12,18 +12,21 @@ export function openWindow(option?: OpenWindowOption): BrowserWindow {
     height: 500,
     frame: false,
     center: true,
+    show: false,
     skipTaskbar: true, //不在任务栏显示
     modal: false,
     webPreferences: {
       nodeIntegration: true,
-      devTools: true,
+      devTools: false,
       contextIsolation: false, // false if you want to run e2e test with Spectron,
       preload: path.join(__dirname, 'preload.js')
     }
   };
   const opts = extend(defaultOption, option);
   const win = new BrowserWindow(opts);
+
   win.once('ready-to-show', () => {
+    win.show();
     win.webContents.send('event.current.winId', win.id);
   });
 

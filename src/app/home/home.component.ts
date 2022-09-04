@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ElectronService } from '../shared/services';
-import { NzModalService, ModalOptions } from 'ng-zorro-antd/modal';
+import { HomeService } from './home.service';
 
 @Component({
   selector: 'app-home',
@@ -10,94 +8,65 @@ import { NzModalService, ModalOptions } from 'ng-zorro-antd/modal';
 })
 export class HomeComponent implements OnInit {
   /**
-   * 选择的文件路径
+   * 持仓文件路径
    */
-  filePath?: string;
-  validateForm!: FormGroup;
-  radioValue = 'A';
-  constructor(
-    private fb: FormBuilder,
-    public electronService: ElectronService,
-    private nzModalService: NzModalService
-  ) {}
+  filePathHolder?: string;
+  /**
+   * 配置文件路径
+   */
+  filePathConfig?: string;
+  /**
+   * 计算中
+   */
+  calculating = false;
+  result: any[] = [];
+  constructor(private homeService: HomeService) {}
 
-  submitForm(): void {
-    if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
-    } else {
-      Object.values(this.validateForm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
+  ngOnInit(): void {}
+
+  /**
+   * 点击 持仓文件 选择文件按钮
+   */
+  async onOpenFileDialogHolder() {
+    const path = await this.homeService.openFileDialog('持仓文件', ['xls', 'xlsx']);
+    if (path) {
+      this.filePathHolder = path;
     }
   }
 
   /**
-   * 点击选择文件按钮
+   * 点击 参数文件 选择文件按钮
    */
-  onOpenFileDialog() {
-    this.electronService
-      .showOpenDialog({ properties: ['openFile'], filters: [{ name: '数据文件', extensions: ['xls', 'xlsx'] }] })
-      .then(v => {
-        if (v.filePaths.length) {
-          this.filePath = v.filePaths[0];
-        }
-      });
+  async onOpenFileDialogConfig() {
+    const path = await this.homeService.openFileDialog('参数文件', ['xml']);
+    if (path) {
+      this.filePathConfig = path;
+    }
   }
 
   /**
-   * 提交
+   * 点击计算按钮
    */
-  onSubmit() {
-    if (!this.filePath) {
-      this.alert({ nzContent: '请选择文件' });
+  onCalcClick() {
+    if (this.calculating) {
+      this.homeService.alert('正在计算中，请稍后...');
       return;
     }
 
-    const exists = this.electronService.fs.existsSync(this.filePath);
-    if (!exists) {
-      this.alert({ nzContent: '文件不存在或已被删除，请重新选择' });
+    const valid = this.homeService.validateFilePath(this.filePathConfig, this.filePathHolder);
+    if (!valid) {
       return;
     }
 
+    this.calculating = true;
+    setTimeout(() => (this.calculating = false), 5000);
   }
 
-  private alert(option: ModalOptions) {
-    return this.nzModalService.create({
-      nzCentered: true,
-      nzMaskClosable: false,
-      nzTitle: '提示',
-      nzCancelText: null,
-      ...option
-    });
-  }
+  /**
+   * 另存为持仓文件模板
+   */
+  onSaveAsTemplate() {
 
-  openModal() {
-    // this.nzModalService.create({ nzTitle: '冲冲冲', nzContent: 'xxx' });
-    // this.electronService.openWindow({ url: 'http://localhost:4200', modal: true });
-    // this.electronService.showOpenDialog({ properties: ['openFile', 'multiSelections'] }).then(list => {
-    //   console.log(list.filePaths);
-    // });
-    this.electronService
-      .showMessageBox({
-        title: '提示',
-        message: 'xxx',
-        type: 'question',
-        noLink: true,
-        buttons: ['测试', '先谢谢']
-      })
-      .then(ret => {
-        console.log(ret);
-      });
-  }
-
-  ngOnInit(): void {
-    this.validateForm = this.fb.group({
-      userName: [null, [Validators.required]],
-      password: [null, [Validators.required]],
-      remember: [true]
-    });
+    this.homeService.saveAsTemplate();
   }
 }

@@ -1,29 +1,50 @@
 <desk-window>
-  <desk-titlebar titlebar-action></desk-titlebar>
-  <div style="flex: 1; padding: 50px">
-    <div nz-form>
+  <desk-titlebar titlebar-action title="组合保证金计算工具"></desk-titlebar>
+  <div style="flex: 1; padding: 20px">
+    <div *ngIf="!result.length" nz-form style="margin-top: 30px">
       <nz-form-item nz-row>
-        <nz-form-label nz-col nzFlex="100px" nzRequired>数据文件</nz-form-label>
+        <nz-form-label nz-col nzFlex="80px" nzRequired>参数文件</nz-form-label>
         <nz-form-control nz-col nzFlex="auto">
-          <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
-            <input nz-input readonly [ngModel]="filePath" />
-          </nz-input-group>
+          <div class="form-control">
+            <nz-input-group class="control-item" [nzAddOnAfter]="addOnAfterConfigTemplate">
+              <input nz-input readonly [ngModel]="filePathConfig" />
+            </nz-input-group>
+            <div style="width: 80px"></div>
 
-          <ng-template #addOnAfterTemplate>
-            <a class="btn-file" (click)="onOpenFileDialog()">文件...</a>
-          </ng-template>
+            <ng-template #addOnAfterConfigTemplate>
+              <a class="btn-file" (click)="onOpenFileDialogConfig()">选择文件...</a>
+            </ng-template>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item nz-row>
+        <nz-form-label nz-col nzFlex="80px" nzRequired>持仓文件</nz-form-label>
+        <nz-form-control nz-col nzFlex="auto">
+          <div class="form-control">
+            <nz-input-group class="control-item" [nzAddOnAfter]="addOnAfterHolderTemplate">
+              <input nz-input readonly [ngModel]="filePathHolder" />
+            </nz-input-group>
+            <div style="width: 80px">
+              <button nz-button type="button" nzType="link" (click)="onSaveAsTemplate()">保存模板</button>
+            </div>
+
+            <ng-template #addOnAfterHolderTemplate>
+              <a class="btn-file" (click)="onOpenFileDialogHolder()">选择文件...</a>
+            </ng-template>
+          </div>
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
-        <div nz-col nzFlex="100px"></div>
+        <div nz-col nzFlex="80px"></div>
         <nz-form-control nz-col nzFlex="auto">
-          <nz-space>
-            <desk-progress-circle *nzSpaceItem></desk-progress-circle>
-            <button *nzSpaceItem nz-button nzType="primary" (click)="onSubmit()">计算</button>
-          </nz-space>
+          <button nz-button nzType="primary" (click)="onCalcClick()">计算</button>
+          <desk-progress-circle *ngIf="calculating" style="margin-left: 20px"></desk-progress-circle>
         </nz-form-control>
       </nz-form-item>
     </div>
+
+    <app-result *ngIf="result.length" [result]="result"></app-result>
   </div>
 </desk-window>

@@ -7,6 +7,6 @@ import { UiLibModule } from 'ui-lib';
 @NgModule({
   declarations: [WebviewDirective, TitlebarActionDirective],
   imports: [CommonModule, FormsModule],
-  exports: [WebviewDirective, FormsModule, UiLibModule, TitlebarActionDirective]
+  exports: [CommonModule, WebviewDirective, FormsModule, UiLibModule, TitlebarActionDirective]
 })
 export class SharedModule {}

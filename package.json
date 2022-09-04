@@ -39,10 +39,12 @@
     "@angular/platform-browser": "^14.1.2",
     "@angular/platform-browser-dynamic": "^14.1.2",
     "@angular/router": "^14.1.2",
-    "ng-zorro-antd": "^14.0.0-beta.0",
+    "@xmagic/nzx-antd": "~13.3.4",
+    "ng-zorro-antd": "^14.0.0",
     "rxjs": "7.5.6",
     "save-dev": "0.0.1-security",
     "tslib": "^2.4.0",
+    "xlsx": "^0.18.5",
     "zone.js": "0.11.8"
   },
   "devDependencies": {
@@ -65,12 +67,11 @@
     "electron-debug": "3.2.0",
     "electron-reloader": "1.2.3",
     "eslint": "8.20.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jsdoc": "39.3.3",
     "eslint-plugin-prefer-arrow": "1.2.3",
-    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "prettier-eslint": "^15.0.1",
     "jasmine-core": "4.2.0",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.4.0",
@@ -82,6 +83,7 @@
     "node-polyfill-webpack-plugin": "2.0.0",
     "npm-run-all": "4.1.5",
     "prettier": "^2.7.1",
+    "prettier-eslint": "^15.0.1",
     "typescript": "4.7.4"
   },
   "engines": {

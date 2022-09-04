@@ -10,12 +10,14 @@ function createWindow(): BrowserWindow {
   const size = screen.getPrimaryDisplay().workAreaSize;
 
   mainWindow = openWindow({
-    width: size.width,
-    height: size.height,
+    width: 800,
+    height: 500,
     skipTaskbar: false,
+    minWidth: 600,
+    minHeight: 350,
+    title: '组合保证金计算工具',
     url: 'http://localhost:4200'
   });
-  mainWindow.maximize();
 
   if (serve) {
     const debug = require('electron-debug');
@@ -75,4 +77,3 @@ try {
   // Catch Error
   // throw e;
 }
-

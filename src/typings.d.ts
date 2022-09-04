@@ -10,5 +10,8 @@ interface Window {
   showOpenDialog: any;
   invokeBowserWindow: any;
   require: any;
-  electronAPI: any;
 }
+
+declare const basePath: string;
+declare const assetsPath: string;
+declare const BasePath: (url: TemplateStringsArray, ...keys: string[]) => string;
